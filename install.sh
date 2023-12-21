@@ -48,7 +48,7 @@ source etc/library.sh
 
 # check distro
 check_distro etc/ncp.cfg || {
-  echo "ERROR: distro not supported:";
+  echo "ERROR: distro not supported du tout:";
   cat /etc/issue
   exit 1;
 }
