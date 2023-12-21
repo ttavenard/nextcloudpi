@@ -504,13 +504,30 @@ function is_app_enabled()
    ncc app:list | sed '0,/Disabled/!d' | grep -q "${app}"
 }
 
-function check_distro()
+function check_distro_old()
 {
   local cfg="${1:-$NCPCFG}"
   local supported=$(jq -r .release "$cfg")
   grep -q "$supported" <(lsb_release -sc) && return 0
   return 1
 }
+
+function check_distro()
+{
+  local cfg="${1:-$NCPCFG}"
+  local supported=$(jq -r .release "$cfg")
+  local current=$(lsb_release -sc)
+
+  echo "Supported version: $supported"
+  echo "Current version: $current"
+
+  grep -q "$supported" <<< "$current" && return 0
+
+  echo "Distribution mismatch!"
+  return 1
+}
+
+
 
 function nc_version()
 {
